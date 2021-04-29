@@ -1,0 +1,56 @@
+.container{
+    height: 300px;
+    width: 100%;
+    max-width: 300px;
+}
+
+
+.topBread{
+    height: 15%;
+    width: 50%;
+    background: linear-gradient(#cc561e, #ef8d32);
+    border-radius: 50% 50% 10% 10%;
+    box-shadow: inset -10px 5px #cc561e;
+    margin: 2% auto;
+    position: relative;
+}
+
+.bottomBread{
+    height: 10%;
+    width: 50%;
+    background: linear-gradient(#cc561e, #ef8d32);
+    border-radius: 10% 10% 30% 30%;
+    box-shadow: inset -10px -5px #cc561e;
+    margin: 2% auto;
+    position: relative;
+}
+
+.cheese{
+    height: 5%;
+    width: 55%;
+    background: linear-gradient(#ffbe0f, #fff600);
+    border-radius: 25%;
+    box-shadow: inset -5px 5px #ffbe0f;
+    margin: 1% auto;
+    position: relative;
+}
+
+.meat{
+    height: 5%;
+    width: 55%;
+    background: linear-gradient(#aa2b1d, #cc561e);
+    border-radius: 25%;
+    box-shadow: inset -5px 5px #aa2b1d;
+    margin: 1% auto;
+    position: relative;
+}
+
+.lettuce{
+    height: 5%;
+    width: 55%;
+    background: linear-gradient(#049200, #7ddf60);
+    border-radius: 25%;
+    box-shadow: inset -5px 5px #049200;
+    margin: 1% auto;
+    position: relative;
+}

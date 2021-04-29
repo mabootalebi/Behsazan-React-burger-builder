@@ -1,0 +1,10 @@
+.container{
+    height: 100vh;
+    background-color: #e1f1dd;
+}
+
+
+.mainBody{
+    height: calc(100vh - 90px);
+    overflow: auto;
+}

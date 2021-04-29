@@ -1,0 +1,17 @@
+.container{
+    margin: 5px;
+    min-height: 40px;
+    min-width: 100px;
+    border-radius: 30px 5px;
+    background-color: #00af91;
+    color: white;
+    border: solid thin #007965;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.container:hover{
+    border-radius: 5px 30px;
+    background-color: #007965;
+    transition: all 0.5s;
+}
