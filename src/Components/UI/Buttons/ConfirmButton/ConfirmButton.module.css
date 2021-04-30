@@ -8,10 +8,11 @@
     border: solid thin #007965;
     display: inline-block;
     cursor: pointer;
+    
+    transition: all 0.5s;
 }
 
 .container:hover{
     border-radius: 5px 30px;
-    background-color: #007965;
-    transition: all 0.5s;
+    background-color: #007965;    
 }
