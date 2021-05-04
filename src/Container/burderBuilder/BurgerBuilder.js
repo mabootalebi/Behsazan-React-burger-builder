@@ -3,19 +3,20 @@ import BurgerView from './BurgerView/BurgerView';
 import classes from './BurgerBuilder.module.css';
 import Counter from './Counter/Counter';
 import TotalAmount from './TotalAmount/TotalAmount';
-import ConfirmButton from '../../Components/UI/Buttons/ConfirmButton/ConfirmButton';
-import RejectButton from '../../Components/UI/Buttons/RejectButton/RejectButton';
+import Button from '../../Components/UI/Button/Button';
 
 class BurgerBuilder extends React.Component{
 
     constructor(props){
         super(props);
         
-        this.state={
-            meat:0,
-            cheese:0,
-            lettuce:0
-        };
+        this.state= this.initialState;
+    }
+
+    initialState = {
+        meat:0,
+        cheese:0,
+        lettuce:0
     }
 
     handleChange = (label,mode) => {
@@ -28,13 +29,7 @@ class BurgerBuilder extends React.Component{
     }
 
     resetOrders = () =>{
-        this.setState(()=>{
-            return{
-                meat:0,
-                cheese:0,
-                lettuce:0
-            }
-        })
+        this.setState(()=>this.initialState)
     }
 
     render(){
@@ -47,8 +42,8 @@ class BurgerBuilder extends React.Component{
             <Counter label="Lettuce" count={lettuce} onChange={this.handleChange}></Counter>
             <TotalAmount meat={meat} cheese={cheese} lettuce={lettuce}></TotalAmount>
             <div>
-                <RejectButton title="Reset" onClick={this.resetOrders}></RejectButton>
-                <ConfirmButton title="Order" onClick={null}></ConfirmButton>                
+                <Button title="Reset" classNames="rejectButton" onClick={this.resetOrders}></Button>
+                <Button title="Order" classNames="confirmButton" onClick={null}></Button>
             </div>
         </div>
     }
