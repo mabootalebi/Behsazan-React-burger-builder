@@ -8,15 +8,15 @@ export default function BurgerView(props){
     const lettuces = [];
 
     for(let i=0; i<props.cheese; i++){
-        cheeses.push(<div className={classes.cheese}></div>);
+        cheeses.push(<div key={i} className={classes.cheese}></div>);
     }
 
     for(let i=0; i<props.meat; i++){
-        meats.push(<div className={classes.meat}></div>);
+        meats.push(<div key={i} className={classes.meat}></div>);
     }
 
     for(let i=0; i<props.lettuce; i++){
-        lettuces.push(<div className={classes.lettuce}></div>);
+        lettuces.push(<div key={i} className={classes.lettuce}></div>);
     }
 
     return <div className={classes.container}>

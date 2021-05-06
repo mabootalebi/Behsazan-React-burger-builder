@@ -4,3 +4,36 @@
     justify-content: center;
     align-items: center;
 }
+
+.messageBox {
+    border: thin solid #000;
+    border-radius: 10px;
+    margin: 15px auto;
+    padding: 20px;
+    width: 75%;
+    text-align: center;
+}
+
+.warning {
+    border-color: yellow;
+    background-color: lightyellow;
+    color: orange;
+}
+
+.error {
+    border-color: #900d0d;
+    background-color: #ffdbc5;
+    color: #cf1b1b;
+}
+
+.success {
+    border-color: #01aa03;
+    background-color: #dbffd6;
+    color: #01aa03;
+}
+
+.info {
+    border-color: #3282b8;
+    background-color: #bbe1fa;
+    color: #0f4c75;
+}
