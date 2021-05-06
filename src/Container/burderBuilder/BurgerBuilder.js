@@ -4,7 +4,7 @@ import classes from './BurgerBuilder.module.css';
 import Counter from './Counter/Counter';
 import TotalAmount from './TotalAmount/TotalAmount';
 import Button from '../../Components/UI/Button/Button';
-import axios from 'axios';
+import axios from '../../Tools/fetch';
 
 class BurgerBuilder extends React.Component{
 
@@ -62,7 +62,7 @@ class BurgerBuilder extends React.Component{
             this.displayMessages('info', 'Sending Request...');
             this.changeSubmittingState(true);
 
-            axios.post('http://aedalat.ir/order/addorder',{
+            axios.post('order/addorder',{
                 meat:meat,
                 cheese:cheese,
                 salad:lettuce,
