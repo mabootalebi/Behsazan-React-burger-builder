@@ -7,7 +7,6 @@
     border-collapse: collapse;
 }
 
-
 .table thead tr th{
     border: solid thin #132c33;
     background-color: #2b4f60;
@@ -24,4 +23,18 @@
 
 .table tbody tr:last-child{
     border-bottom: solid 7px #2b4f60;
+}
+
+.sortingButton{
+    border-radius: 50%;
+    border: solid thin #ead3cb;
+    padding: 5px;
+    margin-right: 10px;
+    background-color: #ead3cb;
+}
+
+.sortingButton:hover{
+    background-color: #845460;
+    border-color: #845460;
+    color: #fff;
 }
