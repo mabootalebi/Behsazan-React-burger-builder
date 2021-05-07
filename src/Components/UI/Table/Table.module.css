@@ -1,0 +1,27 @@
+.container{
+    text-align: center;
+}
+
+.table{
+    margin: 25px auto;
+    border-collapse: collapse;
+}
+
+
+.table thead tr th{
+    border: solid thin #132c33;
+    background-color: #2b4f60;
+    padding: 10px;
+    color: #fff;
+}
+
+.table tbody tr td{
+    border: solid thin #132c33;
+    background-color: #bdc7c9;
+    padding: 10px;
+    color: #000;
+}
+
+.table tbody tr:last-child{
+    border-bottom: solid 7px #2b4f60;
+}
