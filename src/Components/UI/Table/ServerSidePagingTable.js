@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Paging from './Paging/Paging';
 import classes from './Table.module.css';
 
-function ServerSizePagingTable(props){
+function ServerSidePagingTable(props){
 
     const {header,keyField,body,totalCount} = props;
     
@@ -77,4 +77,4 @@ function ServerSizePagingTable(props){
     </>
 }
 
-export default ServerSizePagingTable;
+export default ServerSidePagingTable;

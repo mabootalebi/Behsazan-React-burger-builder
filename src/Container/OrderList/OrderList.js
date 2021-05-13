@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from '../../Tools/fetch';
-import ServerSizePagingTable from '../../Components/UI/Table/ServerSidePagingTable';
+import ServerSidePagingTable from '../../Components/UI/Table/ServerSidePagingTable';
 
 
 export default function OrderList(){
@@ -31,7 +31,7 @@ export default function OrderList(){
         {columnName: "rate", columnTitle: "Rate", sortable:true}
     ];
 
-    return <ServerSizePagingTable keyField="order_number" header={header} body={orders} fetchData={fetchData} totalCount={totalCount}></ServerSizePagingTable>
+    return <ServerSidePagingTable keyField="order_number" header={header} body={orders} fetchData={fetchData} totalCount={totalCount}></ServerSidePagingTable>
 }
 
 
@@ -40,7 +40,6 @@ export default function OrderList(){
 // import React, {useEffect,useState} from 'react';
 // import axios from '../../Tools/fetch';
 // import Table from '../../Components/UI/Table/Table';
-// import ServerSizePagingTable from '../../Components/UI/Table/ServerSidePagingTable';
 
 // export default function OrderList(){
 //     const [orders,setOrders] = useState([]);
