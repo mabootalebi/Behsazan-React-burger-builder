@@ -1,14 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Paging from './Paging/Paging';
 import classes from './Table.module.css';
 
-function Table({header,body,keyField}){
+function ServerSizePagingTable(props){
 
+    const {header,keyField,body,totalCount} = props;
+    
     const [sortField,setSortField] = useState(keyField);
     const [sortOrder,setSortOrder] = useState("asc");
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(10);
 
+
+    useEffect(()=> {
+        prepareData()
+    }, [])
+
+    useEffect(()=> {
+        prepareData()
+    }, [pageSize,pageNumber,sortField,sortOrder])
 
     const sortBasedHeaderField = (fieldName) => {
         if (fieldName === sortField)
@@ -21,12 +31,13 @@ function Table({header,body,keyField}){
         }
     }
 
-    const prepareData = () => {
-        let result = body.sort((a,b) => { return (sortOrder === 'asc'? a[sortField] > b[sortField]: a[sortField] < b[sortField])});
-        result = result.filter((item,index) => {
-            return index >= ((pageNumber - 1) * pageSize) && index < (pageNumber * pageSize)
-        })
-        return result;
+    const prepareData = () => {        
+        props.fetchData({
+            sortField: sortField,
+            sortOrder: sortOrder,
+            pageNumber: pageNumber,
+            pageSize: pageSize
+        });        
     }
 
     const handleChangePageSize = (e) => {
@@ -38,7 +49,7 @@ function Table({header,body,keyField}){
     }
 
     return <>
-        <Paging handleChangePageNumber={handleChangePageNumber} handleChangePageSize={handleChangePageSize} pageSize={pageSize} totalRecords={body.length}></Paging>    
+        <Paging handleChangePageNumber={handleChangePageNumber} handleChangePageSize={handleChangePageSize} pageSize={pageSize} totalRecords={totalCount}></Paging>    
         <div className={classes.container}>
             <table className={classes.table}>
                 <thead>
@@ -55,7 +66,7 @@ function Table({header,body,keyField}){
                     </tr>
                 </thead>
                 <tbody>
-                    {prepareData().map(row => <tr key={row[keyField]}>
+                    {body.map(row => <tr key={row[keyField]}>
                         {header.map(col => <td key={col.columnName}>
                             {row[col.columnName]}
                         </td>)}
@@ -66,5 +77,4 @@ function Table({header,body,keyField}){
     </>
 }
 
-
-export default Table;
+export default ServerSizePagingTable;

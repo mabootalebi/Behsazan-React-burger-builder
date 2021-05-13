@@ -1,0 +1,12 @@
+.pagingSection {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.selection {
+    margin-right: 20px;
+    border-radius: 5px;
+    outline: none;
+    border: solid thin #aaa;
+    min-width: 60px;
+}
