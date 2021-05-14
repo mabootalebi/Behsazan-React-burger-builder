@@ -5,6 +5,7 @@ import Counter from './Counter/Counter';
 import TotalAmount from './TotalAmount/TotalAmount';
 import Button from '../../Components/UI/Button/Button';
 import axios from '../../Tools/fetch';
+import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 
 class BurgerBuilder extends React.Component{
 
@@ -110,11 +111,7 @@ class BurgerBuilder extends React.Component{
                 <Button title="Order" disabled={submitting} classnames="confirmButton" onClick={this.registerOrder}></Button>
             </div>
 
-            {messageType && 
-                <div className={([classes.messageBox, classes[messageType]]).join(' ')}>
-                    <span>{message}</span>
-                </div>
-            }
+            {messageType && <MessageBox messageType={messageType} message={message}></MessageBox>}
         </div>
     }
 }

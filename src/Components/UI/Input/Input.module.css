@@ -1,0 +1,24 @@
+.label{
+    margin: 5px 2px;
+}
+
+.input {
+    margin: 5px 2px;
+}
+
+.input input {
+    width: 100%;
+    height: 25px;
+    outline: none;
+    border-radius: 5px;
+    border: solid thin #ddd;
+}
+
+.input input:focus {
+    outline: solid thin #aaa;
+}
+
+.dangerNotify {
+    color: red;
+    margin: 5px 2px;
+}
