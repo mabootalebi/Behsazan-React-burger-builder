@@ -159,11 +159,11 @@ export default class SignUp extends React.Component{
                 <div className={classes.formLabel}>
                     <span> SignUp</span>
                 </div>
-                <Input required label="Username" type="text" name="username" onChange={this.handleChangeInput} value={username} errorMessage={usernameErrorMessage}></Input>
-                <Input required label="Password" type="password" name="password" onChange={this.handleChangeInput} value={password} errorMessage={passwordErrorMessage}></Input>
-                <Input required label="Confirm Password" type="password" name="confirmPassword" onChange={this.handleChangeInput} value={confirmPassword} errorMessage={confirmPasswordErrorMessage}></Input>
-                <Input required label="FullName" type="text" name="fullName" onChange={this.handleChangeInput} value={fullName} errorMessage={fullNameErrorMessage}></Input>
-                <Input required label="Email" type="email" name="email" onChange={this.handleChangeInput} value={email} errorMessage={emailErrorMessage}></Input>
+                <Input required label="Username" type="text" name="username" onChange={this.handleChangeInput} value={username} errormessage={usernameErrorMessage}></Input>
+                <Input required label="Password" type="password" name="password" onChange={this.handleChangeInput} value={password} errormessage={passwordErrorMessage}></Input>
+                <Input required label="Confirm Password" type="password" name="confirmPassword" onChange={this.handleChangeInput} value={confirmPassword} errormessage={confirmPasswordErrorMessage}></Input>
+                <Input required label="FullName" type="text" name="fullName" onChange={this.handleChangeInput} value={fullName} errormessage={fullNameErrorMessage}></Input>
+                <Input required label="Email" type="email" name="email" onChange={this.handleChangeInput} value={email} errormessage={emailErrorMessage}></Input>
                 <div className={classes.submitButton}>
                     <Button disabled={submitting} title="Submit" classnames="confirmButton"></Button>
                 </div>

@@ -11,8 +11,8 @@ export default function Input(props){
         <div className={classes.input}>
             <input {...props} />
         </div>
-        {props.errorMessage && <div className={classes.dangerNotify}>
-            <span>{props.errorMessage}</span>
+        {props.errormessage && <div className={classes.dangerNotify}>
+            <span>{props.errormessage}</span>
         </div>
         }
     </>
