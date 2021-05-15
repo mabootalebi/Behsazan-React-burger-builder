@@ -1,6 +1,15 @@
 .container{
     height: 100vh;
+}
+
+.light{
     background-color: #e1f1dd;
+    color: #000;
+}
+
+.dark {
+    background-color: #4d424d;
+    color: #fff;
 }
 
 

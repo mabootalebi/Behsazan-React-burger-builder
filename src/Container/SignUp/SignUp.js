@@ -5,8 +5,11 @@ import classes from './SignUp.module.css';
 import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import axios from '../../Tools/fetch';
 import Loading from '../../Components/UI/Loading/Loading';
+import { ApplicationContext } from '../../Context/ApplicationContext';
 
 export default class SignUp extends React.Component{
+
+    static contextType = ApplicationContext;
 
     constructor(props){
         super(props);
@@ -156,7 +159,7 @@ export default class SignUp extends React.Component{
         const {message, messageType,submitting} = this.state;
 
         return <form onSubmit={this.signUp}>
-            <div className={classes.container}>
+            <div className={([classes.container,classes[this.context.themeMode]]).join(' ')}>
                 <div className={classes.formLabel}>
                     <span> SignUp</span>
                 </div>

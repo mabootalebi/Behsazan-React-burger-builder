@@ -1,4 +1,5 @@
 .container{
     margin-left: auto;
     padding-right: 10px;
+    min-width: 200px;
 }

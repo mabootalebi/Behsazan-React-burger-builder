@@ -1,8 +1,15 @@
 .container{
-    background-color: #cdc7be;
     display: flex;
     flex-flow: row;
     height: 100px;
     justify-content: center;
     align-items: center;
+}
+
+.light {
+    background-color: #cdc7be;
+}
+
+.dark {
+    background-color: #36292c;
 }

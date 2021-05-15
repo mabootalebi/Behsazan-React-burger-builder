@@ -7,9 +7,11 @@ import useInput from '../../Hooks/useInput';
 import axios from '../../Tools/fetch';
 import Loading from '../../Components/UI/Loading/Loading';
 import { AuthenticationContext } from '../../Context/AuthenticationContext';
+import { ApplicationContext } from '../../Context/ApplicationContext';
 
 export default function Login(props){
     const authContext = useContext(AuthenticationContext);
+    const appContext = useContext(ApplicationContext);
 
     const [submitting,setSubmitting] = useState(false);
     const [message,setMessage] = useState('');
@@ -46,7 +48,7 @@ export default function Login(props){
     }
 
     return <form onSubmit={handleLogin}>        
-            <div className={classes.container}>
+            <div className={([classes.container, classes[appContext.themeMode]]).join(' ')}>
                 <div className={classes.formLabel}>
                     <span> Login </span>
                 </div>

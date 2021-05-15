@@ -16,7 +16,7 @@ export default function OrderList(props){
         if (!authContext.isLogin){
             props.history.push('/');
         }
-    })
+    },[authContext.isLogin,props.history])
 
     const fetchData = (data) => {
         axios.post('/Order/GetAllOrders', {

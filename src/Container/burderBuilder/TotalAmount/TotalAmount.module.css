@@ -1,5 +1,12 @@
 .container{
-    font-weight: bold;
-    color: #547480;
+    font-weight: bold;    
     margin: 10px auto;
+}
+
+.light{
+    color: #547480;
+}
+
+.dark {
+    color: #a9c9e5;
 }
