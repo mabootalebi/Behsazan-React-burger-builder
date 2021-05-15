@@ -6,6 +6,7 @@ import TotalAmount from './TotalAmount/TotalAmount';
 import Button from '../../Components/UI/Button/Button';
 import axios from '../../Tools/fetch';
 import MessageBox from '../../Components/UI/MessageBox/MessageBox';
+import Loading from '../../Components/UI/Loading/Loading';
 
 class BurgerBuilder extends React.Component{
 
@@ -112,6 +113,7 @@ class BurgerBuilder extends React.Component{
             </div>
 
             {messageType && <MessageBox messageType={messageType} message={message}></MessageBox>}
+            {submitting && <Loading></Loading>}
         </div>
     }
 }

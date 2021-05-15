@@ -4,6 +4,7 @@ import Button from '../../Components/UI/Button/Button';
 import classes from './SignUp.module.css';
 import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import axios from '../../Tools/fetch';
+import Loading from '../../Components/UI/Loading/Loading';
 
 export default class SignUp extends React.Component{
 
@@ -169,6 +170,7 @@ export default class SignUp extends React.Component{
                 </div>
 
                 {messageType && <MessageBox message={message} messageType={messageType}></MessageBox>}
+                {submitting && <Loading></Loading>}
             </div>
         </form>
     }
