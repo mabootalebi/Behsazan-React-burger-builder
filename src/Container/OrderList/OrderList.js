@@ -1,11 +1,22 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import axios from '../../Tools/fetch';
 import ServerSidePagingTable from '../../Components/UI/Table/ServerSidePagingTable';
+import { AuthenticationContext } from '../../Context/AuthenticationContext';
 
 
-export default function OrderList(){
+export default function OrderList(props){
+
+    const authContext = useContext(AuthenticationContext);
+
     const [orders, setOrders] = useState([]);
     const [totalCount, setTotalCount] = useState();
+
+    // redirect to Login Page, If user is not Authenticated
+    useEffect(() => {
+        if (!authContext.isLogin){
+            props.history.push('/');
+        }
+    })
 
     const fetchData = (data) => {
         axios.post('/Order/GetAllOrders', {

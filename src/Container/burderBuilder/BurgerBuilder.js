@@ -7,8 +7,11 @@ import Button from '../../Components/UI/Button/Button';
 import axios from '../../Tools/fetch';
 import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import Loading from '../../Components/UI/Loading/Loading';
+import { AuthenticationContext } from '../../Context/AuthenticationContext';
 
 class BurgerBuilder extends React.Component{
+
+    static contextType = AuthenticationContext;
 
     constructor(props){
         super(props);
@@ -23,6 +26,13 @@ class BurgerBuilder extends React.Component{
         message: '',
         messageType: '',
         submitting: false
+    }
+
+    // redirect to Login Page, If user is not Authenticated
+    componentDidMount = () => {
+        if (!this.context.isLogin){
+            this.props.history.push('/');
+        }
     }
 
     handleChange = (label,mode) => {

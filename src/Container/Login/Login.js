@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import classes from './Login.module.css';
 import Input from '../../Components/UI/Input/Input';
 import Button from '../../Components/UI/Button/Button';
@@ -6,9 +6,11 @@ import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import useInput from '../../Hooks/useInput';
 import axios from '../../Tools/fetch';
 import Loading from '../../Components/UI/Loading/Loading';
+import { AuthenticationContext } from '../../Context/AuthenticationContext';
 
 export default function Login(props){
-    
+    const authContext = useContext(AuthenticationContext);
+
     const [submitting,setSubmitting] = useState(false);
     const [message,setMessage] = useState('');
     const [messageType,setMessageType] = useState('');
@@ -30,8 +32,9 @@ export default function Login(props){
                     setMessage(result.data.message);                
                 }
                 else{
-                    window.localStorage.setItem('token', result.data.message);
-                    props.history.push('/');
+                    authContext.login();
+                    window.localStorage.setItem('token', result.data.message);                    
+                    props.history.push('/BurgerBuilder');
                 }
                 setSubmitting(false);
             }).catch(err =>{
