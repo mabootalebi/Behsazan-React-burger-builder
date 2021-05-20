@@ -28,6 +28,7 @@ export default function AccountBottons(){
         {appContext.themeMode === 'dark' && <ThemeButton classNames="light" themeName="Light Theme" handleChangeTheme={handleChangeTheme}></ThemeButton>}
         {appContext.themeMode === 'light' && <ThemeButton classNames="dark" themeName="Dark Theme" handleChangeTheme={handleChangeTheme}></ThemeButton>}
 
+        {authContext.isLogin && authContext.userFullName && <div style={{display:"inline-block",marginLeft:"10px"}}>{authContext.userFullName}</div>}
     </div>
 }
 

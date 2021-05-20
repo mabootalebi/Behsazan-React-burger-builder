@@ -34,8 +34,7 @@ export default function Login(props){
                     setMessage(result.data.message);                
                 }
                 else{
-                    authContext.login();
-                    window.localStorage.setItem('token', result.data.message);
+                    authContext.login(result.data.message);                    
                     props.history.push('/BurgerBuilder',props.location.state);
                 }
                 setSubmitting(false);

@@ -11,7 +11,7 @@ const API_Auth_Token = {
     post:(url,data) => {
         return API_URL_Instance.post(url,data,{
         headers:{
-            Authorization: "Bearer: " + window.localStorage.getItem('token')
+            Authorization: 'Bearer ' + window.localStorage.getItem('token')
         }});
     }    
 }

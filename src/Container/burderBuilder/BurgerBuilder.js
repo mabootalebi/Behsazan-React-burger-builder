@@ -60,7 +60,7 @@ class BurgerBuilder extends React.Component{
         const {meat,cheese,lettuce} = this.state;
 
         if (!this.context.isLogin){
-            this.displayMessages('error', 'You must Login first');
+            this.displayMessages('error', 'You must Login first. Redirecting to Login page...');
             setTimeout(()=> {
                 this.props.history.push('/Login', {meat, cheese, lettuce});
                 return;
@@ -77,7 +77,7 @@ class BurgerBuilder extends React.Component{
             this.displayMessages('info', 'Sending Request...');
             this.changeSubmittingState(true);
 
-            axios.post('order/addorder',{
+            axios.post('safeorder/addorder',{
                 meat:meat,
                 cheese:cheese,
                 salad:lettuce,

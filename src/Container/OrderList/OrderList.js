@@ -13,7 +13,7 @@ export default function OrderList(props){
 
 
     const fetchData = (data) => {
-        axios.post('Order/GetAllOrders', {
+        axios.post('safeorder/GetAllOrders', {
             sort_field: data.sortField,
 			sort_order: data.sortOrder,
 			page_index: data.pageNumber,

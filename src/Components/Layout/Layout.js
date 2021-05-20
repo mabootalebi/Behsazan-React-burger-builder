@@ -10,15 +10,19 @@ function Layout(props){
     const authContext = useContext(AuthenticationContext);
 
     useEffect(() => {
-        axios.post('user/IsTokenValid', {token: window.localStorage.getItem('token')})
-            .then(result => {
-                if (result.data.status){
-                    authContext.login();
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        const token = window.localStorage.getItem('token');
+        if (token){
+
+            axios.post('user/IsTokenValid', {token})
+                .then(result => {
+                    if (result.data.status){
+                        authContext.login(token);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
     },[authContext])
 
     return <div className={([classes.container, classes[appContext.themeMode]]).join(' ')}>
