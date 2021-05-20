@@ -7,7 +7,7 @@ export default function Tabs(){
     const authContext = useContext(AuthenticationContext);
 
     return <div className={classes.container}>
-        {authContext.isLogin && <TabLink to="/BurgerBuilder" >Burger Builder</TabLink>}
+        <TabLink to="/BurgerBuilder" >Burger Builder</TabLink>
         {authContext.isLogin && <TabLink to="/OrderList">Order List</TabLink>}
     </div>
 }

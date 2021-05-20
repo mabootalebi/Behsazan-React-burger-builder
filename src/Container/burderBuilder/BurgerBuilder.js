@@ -19,21 +19,16 @@ class BurgerBuilder extends React.Component{
         this.state= this.initialState;
     }
 
+    locationState = this.props.location.state;
+
     initialState = {
-        meat:0,
-        cheese:0,
-        lettuce:0,
+        meat: this.locationState != null? this.locationState.meat:0,
+        cheese:this.locationState != null? this.locationState.cheese:0,
+        lettuce:this.locationState != null? this.locationState.lettuce:0,
         message: '',
         messageType: '',
         submitting: false
-    }
-
-    // redirect to Login Page, If user is not Authenticated
-    componentDidMount = () => {
-        if (!this.context.isLogin){
-            this.props.history.push('/');
-        }
-    }
+    }  
 
     handleChange = (label,mode) => {
         // Close Message Box
@@ -61,10 +56,18 @@ class BurgerBuilder extends React.Component{
         return basicPrice + meatPrice + cheesePrice + lettucePrice;
     }
 
-    registerOrder = () => {
+    registerOrder = () => {        
         const {meat,cheese,lettuce} = this.state;
 
-        if (meat + cheese + lettuce === 0){
+        if (!this.context.isLogin){
+            this.displayMessages('error', 'You must Login first');
+            setTimeout(()=> {
+                this.props.history.push('/Login', {meat, cheese, lettuce});
+                return;
+            }, 2000)            
+        }
+
+        else if (meat + cheese + lettuce === 0){
             this.setState({
                 message: 'Please Select Detail',
                 messageType: 'warning'

@@ -5,4 +5,15 @@ const API_URL_Instance =
         baseURL: 'http://aedalat.ir/'
     });
 
-export default API_URL_Instance;
+
+const API_Auth_Token = {
+    ...API_URL_Instance,
+    post:(url,data) => {
+        return API_URL_Instance.post(url,data,{
+        headers:{
+            Authorization: "Bearer: " + window.localStorage.getItem('token')
+        }});
+    }    
+}
+
+export default API_Auth_Token;

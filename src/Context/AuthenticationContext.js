@@ -17,6 +17,7 @@ export function AuthenticationProvider(props) {
 
     const logout = () => {
         setIsLogin(false);
+        window.localStorage.removeItem('token');
     }
 
     return <AuthenticationContext.Provider value={{isLogin,login,logout}}>
