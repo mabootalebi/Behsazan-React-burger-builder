@@ -13,9 +13,11 @@ const API_Auth_Token = {
         headers:{
             Authorization: 'Bearer ' + window.localStorage.getItem('token')
         }})
-        .catch(err => {            
-            if (err.response.status === 403){                
-                window.location.replace('/AccessDenied');
+        .catch(err => {    
+            if (err.response){        
+                if (err.response.status === 403){                
+                    window.location.replace('/AccessDenied');
+                }
             }
         });
     }    
