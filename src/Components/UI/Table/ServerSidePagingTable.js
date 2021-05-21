@@ -1,16 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import Paging from './Paging/Paging';
 import classes from './Table.module.css';
+
+
+function reducer(currentState, action){
+    switch (action.type){
+        case 'ChangeSortOrder':
+            return {
+                ...currentState,
+                sortOrder: action.payload.sortOrder
+            };
+        case 'ChangeSortField':
+            return {
+                ...currentState,
+                sortField: action.payload.sortField,
+                sortOrder: action.payload.sortOrder
+            };
+        case 'ChangePageSize':
+            return {
+                ...currentState,
+                pageSize: action.payload.pageSize
+            };
+        case 'ChangePageNumber':
+            return {
+                ...currentState,
+                pageNumber: action.payload.pageNumber
+            };
+        default:
+            return currentState;
+    }
+}
 
 function ServerSidePagingTable(props){
 
     const {header,keyField,body,totalCount} = props;
     
-    const [sortField,setSortField] = useState(keyField);
-    const [sortOrder,setSortOrder] = useState("asc");
-    const [pageNumber, setPageNumber] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
 
+    const [state,dispatch] = useReducer(reducer, {
+        sortField: keyField,
+        sortOrder: "asc",
+        pageNumber: 1,
+        pageSize:10
+    });
 
     useEffect(()=> {
         prepareData()
@@ -18,34 +49,54 @@ function ServerSidePagingTable(props){
 
     useEffect(()=> {
         prepareData()
-    }, [pageSize,pageNumber,sortField,sortOrder])
+    }, [state.pageSize,state.pageNumber,state.sortField,state.sortOrder])
 
     const sortBasedHeaderField = (fieldName) => {
-        if (fieldName === sortField)
+        if (fieldName === state.sortField)
         {
-            setSortOrder(sortOrder === "asc"? "desc":"asc");
+            dispatch({
+                type: 'ChangeSortOrder',
+                payload: {
+                    sortOrder: state.sortOrder === "asc"? "desc": "asc"
+                }
+            });
         }
         else{
-            setSortField(fieldName);
-            setSortOrder("asc");
+            dispatch({
+                type: 'ChangeSortField',
+                payload: {
+                    sortOrder: "asc",
+                    sortField: fieldName                    
+                }
+            });
         }
     }
 
     const prepareData = () => {        
         props.fetchData({
-            sortField: sortField,
-            sortOrder: sortOrder,
-            pageNumber: pageNumber,
-            pageSize: pageSize
+            sortField: state.sortField,
+            sortOrder: state.sortOrder,
+            pageNumber: state.pageNumber,
+            pageSize: state.pageSize
         });        
     }
 
     const handleChangePageSize = (e) => {
-        setPageSize(e.target.value);
+        dispatch({
+            type: 'ChangePageSize',
+            payload: {
+                pageSize: e.target.value,
+            }
+        });
     }
             
     const handleChangePageNumber = (e) => {
-        setPageNumber(e.target.value);
+        dispatch({
+            type: 'ChangePageNumber',
+            payload: {
+                pageNumber: e.target.value,
+            }
+        });
     }
 
     const handleRowClick = (id) => {
@@ -54,7 +105,11 @@ function ServerSidePagingTable(props){
     }
 
     return <>
-        <Paging handleChangePageNumber={handleChangePageNumber} handleChangePageSize={handleChangePageSize} pageSize={pageSize} totalRecords={totalCount}></Paging>    
+        <Paging handleChangePageNumber={handleChangePageNumber} 
+                handleChangePageSize={handleChangePageSize} 
+                pageSize={state.pageSize} 
+                totalRecords={totalCount}>
+        </Paging>    
         <div className={classes.container}>
             <table className={classes.table}>
                 <thead>
