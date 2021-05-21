@@ -19,8 +19,8 @@ export default function OrderList(props){
             setTotalCount(result.data.total_count);
             setOrders(result.data.list);
         })
-        .catch(result =>{
-            console.log(`Something goes wrong. Error Message: ${result}`);            
+        .catch(err =>{
+            console.log(`Something goes wrong. Error Message: ${err}`);             
         })
     }
 
@@ -33,11 +33,11 @@ export default function OrderList(props){
     ];
 
 
-    const hanleRowClick = (id) => {
+    const handleRowClick = (id) => {
         props.history.push('/OrderDetail/:'+ id);
     }
 
-    return <ServerSidePagingTable keyField="order_number" header={header} body={orders} fetchData={fetchData} totalCount={totalCount} hanleRowClick={hanleRowClick}></ServerSidePagingTable>
+    return <ServerSidePagingTable keyField="order_number" header={header} body={orders} fetchData={fetchData} totalCount={totalCount} handleRowClick={handleRowClick}></ServerSidePagingTable>
 }
 
 

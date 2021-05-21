@@ -49,8 +49,8 @@ function ServerSidePagingTable(props){
     }
 
     const handleRowClick = (id) => {
-        if (props.hanleRowClick)
-            props.hanleRowClick(id);
+        if (props.handleRowClick)
+            props.handleRowClick(id);
     }
 
     return <>

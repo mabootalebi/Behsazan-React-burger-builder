@@ -7,6 +7,7 @@ import Login from './Container/Login/Login';
 import { AuthenticationProvider } from './Context/AuthenticationContext';
 import { ApplicationProvider } from './Context/ApplicationContext';
 import OrderDetail from './Container/OrderDetail/OrderDetail';
+import AccessDenied from './Container/CustomErrorPages/AccessDenied/AccessDenied';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <Route path="/Login" component={Login}></Route>
               <Redirect exact from="/" to="/Login" />
               <Route path="/OrderDetail/:id" component={OrderDetail}></Route>
+              <Route path="/AccessDenied" component={AccessDenied}></Route>
             </Switch>
           </Layout>
         </Router>

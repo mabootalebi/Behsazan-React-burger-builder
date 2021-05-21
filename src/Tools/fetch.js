@@ -12,7 +12,12 @@ const API_Auth_Token = {
         return API_URL_Instance.post(url,data,{
         headers:{
             Authorization: 'Bearer ' + window.localStorage.getItem('token')
-        }});
+        }})
+        .catch(err => {            
+            if (err.response.status === 403){                
+                window.location.replace('/AccessDenied');
+            }
+        });
     }    
 }
 

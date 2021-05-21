@@ -1,0 +1,13 @@
+.statusCode {
+    text-align: center;
+    font-size: 100px;
+    margin: 40px auto;
+    color: #99154e;
+}
+
+.message {
+    text-align: center;
+    font-size: 30px;
+    margin: 40px auto;
+    color: #99154e;
+}
