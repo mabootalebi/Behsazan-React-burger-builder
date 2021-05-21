@@ -48,6 +48,11 @@ function ServerSidePagingTable(props){
         setPageNumber(e.target.value);
     }
 
+    const handleRowClick = (id) => {
+        if (props.hanleRowClick)
+            props.hanleRowClick(id);
+    }
+
     return <>
         <Paging handleChangePageNumber={handleChangePageNumber} handleChangePageSize={handleChangePageSize} pageSize={pageSize} totalRecords={totalCount}></Paging>    
         <div className={classes.container}>
@@ -66,7 +71,8 @@ function ServerSidePagingTable(props){
                     </tr>
                 </thead>
                 <tbody>
-                    {body.map(row => <tr key={row[keyField]}>
+                    {body.map(row => <tr key={row[keyField]} 
+                                        onClick={()=>handleRowClick(row[keyField])}>
                         {header.map(col => <td key={col.columnName}>
                             {row[col.columnName]}
                         </td>)}

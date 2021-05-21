@@ -1,16 +1,12 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import axios from '../../Tools/fetch';
 import ServerSidePagingTable from '../../Components/UI/Table/ServerSidePagingTable';
-import { AuthenticationContext } from '../../Context/AuthenticationContext';
 
 
 export default function OrderList(props){
 
-    const authContext = useContext(AuthenticationContext);
-
     const [orders, setOrders] = useState([]);
     const [totalCount, setTotalCount] = useState();
-
 
     const fetchData = (data) => {
         axios.post('safeorder/GetAllOrders', {
@@ -36,11 +32,16 @@ export default function OrderList(props){
         {columnName: "rate", columnTitle: "Rate", sortable:true}
     ];
 
-    return <ServerSidePagingTable keyField="order_number" header={header} body={orders} fetchData={fetchData} totalCount={totalCount}></ServerSidePagingTable>
+
+    const hanleRowClick = (id) => {
+        props.history.push('/OrderDetail/:'+ id);
+    }
+
+    return <ServerSidePagingTable keyField="order_number" header={header} body={orders} fetchData={fetchData} totalCount={totalCount} hanleRowClick={hanleRowClick}></ServerSidePagingTable>
 }
 
 
-// whith Client Side Paging 
+// with Client Side Paging 
 
 // import React, {useEffect,useState} from 'react';
 // import axios from '../../Tools/fetch';

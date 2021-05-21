@@ -28,3 +28,7 @@
 .table tbody tr:last-child{
     border-bottom: solid 7px #2b4f60;
 }
+
+.table tbody tr:hover td {    
+    background-color: #87a7b3;
+}

@@ -6,6 +6,7 @@ import SignUp from './Container/SignUp/SignUp';
 import Login from './Container/Login/Login';
 import { AuthenticationProvider } from './Context/AuthenticationContext';
 import { ApplicationProvider } from './Context/ApplicationContext';
+import OrderDetail from './Container/OrderDetail/OrderDetail';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route path="/BurgerBuilder" component={BurgerBuilder}></Route>
               <Route path="/Login" component={Login}></Route>
               <Redirect exact from="/" to="/Login" />
+              <Route path="/OrderDetail/:id" component={OrderDetail}></Route>
             </Switch>
           </Layout>
         </Router>

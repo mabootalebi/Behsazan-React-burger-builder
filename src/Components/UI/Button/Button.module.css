@@ -6,6 +6,7 @@
     border: solid thin #000;
     display: inline-block;
     cursor: pointer;
+    padding: 10px;
     
     transition: all 0.5s;
 }
