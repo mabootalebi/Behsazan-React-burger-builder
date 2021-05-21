@@ -1,14 +1,17 @@
 import React, {useState} from 'react';
 import axios from '../../Tools/fetch';
 import ServerSidePagingTable from '../../Components/UI/Table/ServerSidePagingTable';
+import Loading from '../../Components/UI/Loading/Loading';
 
 
 export default function OrderList(props){
 
     const [orders, setOrders] = useState([]);
     const [totalCount, setTotalCount] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchData = (data) => {
+        setIsLoading(true);
         axios.post('safeorder/GetAllOrders', {
             sort_field: data.sortField,
 			sort_order: data.sortOrder,
@@ -18,9 +21,11 @@ export default function OrderList(props){
         .then(result =>{            
             setTotalCount(result.data.total_count);
             setOrders(result.data.list);
+            setIsLoading(false);
         })
         .catch(err =>{
             console.log(`Something goes wrong. Error Message: ${err}`);             
+            setIsLoading(false);
         })
     }
 
@@ -37,7 +42,10 @@ export default function OrderList(props){
         props.history.push('/OrderDetail/:'+ id);
     }
 
-    return <ServerSidePagingTable keyField="order_number" header={header} body={orders} fetchData={fetchData} totalCount={totalCount} handleRowClick={handleRowClick}></ServerSidePagingTable>
+    return <>
+     <ServerSidePagingTable keyField="order_number" header={header} body={orders} fetchData={fetchData} totalCount={totalCount} handleRowClick={handleRowClick}></ServerSidePagingTable>
+     {isLoading && <Loading></Loading>}
+     </>
 }
 
 
