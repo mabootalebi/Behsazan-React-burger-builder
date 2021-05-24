@@ -5,26 +5,28 @@ import Button from '../../Components/UI/Button/Button';
 import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import useInput from '../../Hooks/useInput';
 import axios from '../../Tools/fetch';
-import Loading from '../../Components/UI/Loading/Loading';
 import { AuthenticationContext } from '../../Context/AuthenticationContext';
 import { ApplicationContext } from '../../Context/ApplicationContext';
+import {useDispatch} from 'react-redux';
+import * as loadingActionTypes from '../../Store/loading/loadingActionTypes';
 
 export default function Login(props){
     const authContext = useContext(AuthenticationContext);
     const appContext = useContext(ApplicationContext);
 
-    const [submitting,setSubmitting] = useState(false);
     const [message,setMessage] = useState('');
     const [messageType,setMessageType] = useState('');
     const userName = useInput('',true);
     const password = useInput('',true);
     
+    const dispatch = useDispatch();
+
     const handleLogin = (e) =>{
         e.preventDefault();
         
         if (userName.validate() && password.validate()){        
 
-            setSubmitting(true);
+            dispatch({type: loadingActionTypes.Loading});
             axios.post('User/Login', {
                 username:userName.value,
                 password:password.value
@@ -37,11 +39,12 @@ export default function Login(props){
                     authContext.login(result.data.message);                    
                     props.history.push('/BurgerBuilder',props.location.state);
                 }
-                setSubmitting(false);
+                dispatch({type: loadingActionTypes.UnLoading});
+
             }).catch(err =>{
                 setMessageType('error');    
                 setMessage(err);
-                setSubmitting(false);
+                dispatch({type: loadingActionTypes.UnLoading});
             })
         }
     }
@@ -54,11 +57,10 @@ export default function Login(props){
                 <Input required label="Username" type="text" name="username" {...userName}></Input>
                 <Input required label="Password" type="password" name="password" {...password}></Input>
                 <div className={classes.submitButton}>
-                    <Button disabled={submitting} title="Submit" classnames="confirmButton"></Button>
+                    <Button title="Submit" classnames="confirmButton"></Button>
                 </div>
 
                 {messageType && <MessageBox message={message} messageType={messageType}></MessageBox>}
-                {submitting && <Loading></Loading>}
             </div>
         </form>
 }

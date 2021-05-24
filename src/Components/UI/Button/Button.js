@@ -1,9 +1,13 @@
 import React from 'react';
 import classes from './Button.module.css';
+import {useSelector} from 'react-redux';
 
 export default function Button(props){
+
+    const isLoading = useSelector(loadingStore => loadingStore.loading);
+
     const classesname = [];
-    if (props.disabled){
+    if (isLoading){
         classesname.push(classes.disable);
     }
     else{
@@ -11,7 +15,7 @@ export default function Button(props){
     }
     classesname.push(classes.container);
     
-    return <button {...props} className={classesname.join(' ')} onClick={props.onClick}>
+    return <button {...props} disabled={isLoading} className={classesname.join(' ')} onClick={props.onClick}>
         {props.title}
     </button>
 }
