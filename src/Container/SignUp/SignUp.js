@@ -4,10 +4,11 @@ import Button from '../../Components/UI/Button/Button';
 import classes from './SignUp.module.css';
 import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import axios from '../../Tools/fetch';
-import Loading from '../../Components/UI/Loading/Loading';
 import { ApplicationContext } from '../../Context/ApplicationContext';
+import {connect} from 'react-redux';
+import * as loadingActionTypes from '../../Store/loading/loadingActionTypes';
 
-export default class SignUp extends React.Component{
+class SignUp extends React.Component{
 
     static contextType = ApplicationContext;
 
@@ -31,8 +32,7 @@ export default class SignUp extends React.Component{
         emailErrorMessage:'',
 
         message:'',
-        messageType:'',
-        submitting: false
+        messageType:''
     };
 
     handleChangeInput = (e) => {
@@ -130,7 +130,7 @@ export default class SignUp extends React.Component{
         }
         else{
             const {username,password,fullName,email} = this.state;
-            this.setState({submitting:true});
+            this.props.DisplayLoading();
             axios.post('/user/signup', {
                 username:username,
                 password:password,
@@ -140,15 +140,15 @@ export default class SignUp extends React.Component{
                 this.setState({
                     ...this.initialState,
                     messageType: result.data.status? 'success': 'error',
-                    message: result.data.message,
-                    submitting:false
-                })                
+                    message: result.data.message                    
+                });               
+                this.props.HideLoading();
             }).catch(err =>{
                 this.setState({
                     messageType: 'error',
-                    message: err,
-                    submitting:false
-                })
+                    message: err
+                });
+                this.props.HideLoading();
             })
         }
     }
@@ -156,7 +156,7 @@ export default class SignUp extends React.Component{
     render(){
         const {username, password, confirmPassword, fullName, email} = this.state;
         const {usernameErrorMessage, passwordErrorMessage, confirmPasswordErrorMessage, fullNameErrorMessage, emailErrorMessage} = this.state;
-        const {message, messageType,submitting} = this.state;
+        const {message, messageType} = this.state;
 
         return <form onSubmit={this.signUp}>
             <div className={([classes.container,classes[this.context.themeMode]]).join(' ')}>
@@ -169,12 +169,29 @@ export default class SignUp extends React.Component{
                 <Input required label="FullName" type="text" name="fullName" onChange={this.handleChangeInput} value={fullName} errormessage={fullNameErrorMessage}></Input>
                 <Input required label="Email" type="email" name="email" onChange={this.handleChangeInput} value={email} errormessage={emailErrorMessage}></Input>
                 <div className={classes.submitButton}>
-                    <Button disabled={submitting} title="Submit" classnames="confirmButton"></Button>
+                    <Button title="Submit" classnames="confirmButton"></Button>
                 </div>
-
-                {messageType && <MessageBox message={message} messageType={messageType}></MessageBox>}
-                {submitting && <Loading></Loading>}
+                {messageType && <MessageBox message={message} messageType={messageType}></MessageBox>}                
             </div>
         </form>
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        Loading: state.Loading
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        DisplayLoading: () => {
+            dispatch({type: loadingActionTypes.Loading})
+        },
+        HideLoading: () => {
+            dispatch({type: loadingActionTypes.UnLoading})
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

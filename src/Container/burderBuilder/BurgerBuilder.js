@@ -6,8 +6,9 @@ import TotalAmount from './TotalAmount/TotalAmount';
 import Button from '../../Components/UI/Button/Button';
 import axios from '../../Tools/fetch';
 import MessageBox from '../../Components/UI/MessageBox/MessageBox';
-import Loading from '../../Components/UI/Loading/Loading';
 import { AuthenticationContext } from '../../Context/AuthenticationContext';
+import {connect} from 'react-redux';
+import * as loadingActionTypes from '../../Store/loading/loadingActionTypes';
 
 class BurgerBuilder extends React.Component{
 
@@ -26,8 +27,7 @@ class BurgerBuilder extends React.Component{
         cheese:this.locationState != null? this.locationState.cheese:0,
         lettuce:this.locationState != null? this.locationState.lettuce:0,
         message: '',
-        messageType: '',
-        submitting: false
+        messageType: ''
     }  
 
     handleChange = (label,mode) => {
@@ -75,7 +75,7 @@ class BurgerBuilder extends React.Component{
         }
         else {
             this.displayMessages('info', 'Sending Request...');
-            this.changeSubmittingState(true);
+            this.props.DisplayLoading();
 
             axios.post('safeorder/addorder',{
                 meat:meat,
@@ -91,11 +91,11 @@ class BurgerBuilder extends React.Component{
                 }
                 else{
                     this.displayMessages('error',`Something goes wrong. Error Message: ${result.data.message}`);
-                    this.changeSubmittingState(false);
-                }
+                }                
+                this.props.HideLoading();
             }).catch(result =>{
                 this.displayMessages('error',result);
-                this.changeSubmittingState(false);                
+                this.props.HideLoading();
             })
         }        
     }
@@ -107,12 +107,8 @@ class BurgerBuilder extends React.Component{
         })
     }
 
-    changeSubmittingState = (submitting) => {
-        this.setState({ submitting: submitting })
-    }
-
     render(){
-        const {meat,cheese,lettuce,message,messageType,submitting} = this.state;
+        const {meat,cheese,lettuce,message,messageType} = this.state;
 
         return <div className={classes.container}>
             <BurgerView meat={meat} cheese={cheese} lettuce={lettuce}></BurgerView>
@@ -121,14 +117,30 @@ class BurgerBuilder extends React.Component{
             <Counter label="Lettuce" count={lettuce} onChange={this.handleChange}></Counter>
             <TotalAmount totalAmount={this.calculateTotalAmount()}></TotalAmount>
             <div>
-                <Button title="Reset" disabled={submitting} classnames="rejectButton" onClick={this.resetOrders}></Button>
-                <Button title="Order" disabled={submitting} classnames="confirmButton" onClick={this.registerOrder}></Button>
+                <Button title="Reset" classnames="rejectButton" onClick={this.resetOrders}></Button>
+                <Button title="Order" classnames="confirmButton" onClick={this.registerOrder}></Button>
             </div>
-
             {messageType && <MessageBox messageType={messageType} message={message}></MessageBox>}
-            {submitting && <Loading></Loading>}
         </div>
     }
 }
 
-export default BurgerBuilder;
+const mapStateToProps = (state) => {
+    return{
+        Loading: state.Loading
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        DisplayLoading: () => {
+            dispatch({type: loadingActionTypes.Loading})
+        },
+
+        HideLoading: () => {
+            dispatch({type: loadingActionTypes.UnLoading})
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(BurgerBuilder);
