@@ -4,11 +4,9 @@ import Input from '../../Components/UI/Input/Input';
 import Button from '../../Components/UI/Button/Button';
 import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import useInput from '../../Hooks/useInput';
-import axios from '../../Tools/fetch';
 import { AuthenticationContext } from '../../Context/AuthenticationContext';
 import { ApplicationContext } from '../../Context/ApplicationContext';
-import {useDispatch} from 'react-redux';
-import * as loadingActionTypes from '../../Store/loading/loadingActionTypes';
+import { useAxios } from '../../Hooks/useAxios';
 
 export default function Login(props){
     const authContext = useContext(AuthenticationContext);
@@ -19,32 +17,27 @@ export default function Login(props){
     const userName = useInput('',true);
     const password = useInput('',true);
     
-    const dispatch = useDispatch();
+    const axiosPost = useAxios();
 
     const handleLogin = (e) =>{
         e.preventDefault();
         
         if (userName.validate() && password.validate()){        
-
-            dispatch({type: loadingActionTypes.Loading});
-            axios.post('User/Login', {
+            axiosPost.post('User/Login', {
                 username:userName.value,
                 password:password.value
             }).then(result => {
-                if (!result.data.status){
+                if (!result.status){
                     setMessageType('error');    
-                    setMessage(result.data.message);                
+                    setMessage(result.message);                
                 }
                 else{
-                    authContext.login(result.data.message);                    
+                    authContext.login(result.message);
                     props.history.push('/BurgerBuilder',props.location.state);
                 }
-                dispatch({type: loadingActionTypes.UnLoading});
-
             }).catch(err =>{
                 setMessageType('error');    
                 setMessage(err);
-                dispatch({type: loadingActionTypes.UnLoading});
             })
         }
     }
