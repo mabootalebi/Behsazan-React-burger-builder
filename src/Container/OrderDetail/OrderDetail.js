@@ -1,38 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import classes from './OrderDetail.module.css';
-import axios from '../../Tools/fetch';
 import Button from '../../Components/UI/Button/Button';
-import Loading from '../../Components/UI/Loading/Loading';
 import MessageBox from '../../Components/UI/MessageBox/MessageBox';
+import DisplayInfo from '../../Components/UI/DisplayInfo/DisplayInfo';
+import TextArea from '../../Components/UI/TextArea/TextArea';
+import {useAxios} from '../../Hooks/useAxios';
+import {ApplicationContext} from '../../Context/ApplicationContext'
 
 export default function OrderDetail (props){
 
     const [orderDetail, setOrderDetail] = useState([]);
-    const [submitting, setSubmitting] = useState(false);
     const [comment, setComment] = useState('');
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('');
 
-    const orderNumber = props.location.pathname.split(':')[1];
-
-    const header= [
-        {columnName: "order_number", columnTitle: "Order Number"},
-        {columnName: "create_date", columnTitle: "Create Date"},
-        {columnName: "status", columnTitle: "Status"},
-        {columnName: "meat", columnTitle: "Meat"},
-        {columnName: "cheese", columnTitle: "Cheese"},
-        {columnName: "salad", columnTitle: "Lettuce"},
-        {columnName: "total_price", columnTitle: "Total Price"},
-        {columnName: "comment", columnTitle: "Comment", editable: true},
-        {columnName: "rate", columnTitle: "Rate"}
-    ];
+    const orderNumber = props.match.params.id;
+    const axiosPost = useAxios();
+    const appContext = useContext(ApplicationContext);
 
     useEffect(() => {
-        axios.post('safeorder/getorder', {order_number: orderNumber})
+        axiosPost.post('safeorder/getorder', {order_number: orderNumber})
         .then(result => {            
-            setOrderDetail([result.data]);
-            if (result.data.comment)
-                setComment(result.data.comment);
+            setOrderDetail(result);
+            if (result.comment)
+                setComment(result.comment);
         })
         .catch(err => {
             console.log(err);
@@ -48,52 +39,41 @@ export default function OrderDetail (props){
         setComment(e.target.value);
     }
 
-    const handleSaveCommentClick = () => {
-        setSubmitting(true);
-        axios.post('safeorder/SaveComment', {
+    const handleSaveCommentClick = () => {        
+        axiosPost.post('safeorder/SaveComment', {
             order_number:orderNumber,
 			comment:comment
         }).then(result => {
-            if (result.data.status){
+            if (result.status){
                 setMessageType('success');
                 setMessage('Your comment successfully saved.');
             }
             else {
                 setMessageType('error');
                 setMessage('Something goes wrong. server Message: ' + result.data.message);
-            }
-            setSubmitting(false);
+            }            
         }).catch(err=> {
             setMessageType('error');
-            setMessage(err);
-            setSubmitting(false);
+            setMessage(err);            
         })
     }
 
     return <>
-         <div className={classes.container}>
-            <table className={classes.table}>
-                <thead>
-                    <tr>
-                        {header.map(header =><th key={header.columnName}> {header.columnTitle} </th>)}
-                    </tr>
-                </thead>
-                <tbody>
-                    {orderDetail.map(row => <tr key={row.order_number}>
-                        {header.map(col => <td key={col.columnName}>                            
-                            {col.editable && <textarea className={classes.input} onChange={handleChangeComment} value={comment}>{comment}</textarea>}
-                            {!col.editable && row[col.columnName]}
-                        </td>)}
-                    </tr>)}
-                </tbody>
-            </table>
+        <div className={([classes.container,classes[appContext.themeMode]]).join(' ')}>
+            <DisplayInfo Label="Order Number" Information={orderDetail.order_number}></DisplayInfo>
+            <DisplayInfo Label="Create Date" Information={orderDetail.create_date}></DisplayInfo>
+            <DisplayInfo Label="Status" Information={orderDetail.status}></DisplayInfo>
+            <DisplayInfo Label="Meat" Information={orderDetail.meat}></DisplayInfo>
+            <DisplayInfo Label="Cheese" Information={orderDetail.cheese}></DisplayInfo>
+            <DisplayInfo Label="Lettuce" Information={orderDetail.salad}></DisplayInfo>
+            <DisplayInfo Label="Total Price" Information={orderDetail.total_price}></DisplayInfo>
+            <DisplayInfo Label="Rate" Information={orderDetail.rate}></DisplayInfo>
+            <TextArea Label="Comment" value={comment} onChange={handleChangeComment}></TextArea>
         </div>
-
-
-     {submitting && <Loading></Loading>}
+     
      <div className={classes.buttonsDiv}>
-        <Button title="Back" disabled={submitting} classnames="rejectButton" onClick={handleBackClick}></Button>
-        <Button title="Save Comment" disabled={submitting} classnames="confirmButton" onClick={handleSaveCommentClick}></Button>
+        <Button title="Back" classnames="rejectButton" onClick={handleBackClick}></Button>
+        <Button title="Save Comment" classnames="confirmButton" onClick={handleSaveCommentClick}></Button>
      </div>
      
      <MessageBox message={message} messageType={messageType}></MessageBox>

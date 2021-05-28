@@ -84,7 +84,7 @@ export default function OrderList(props){
 
 
     const handleRowClick = (id) => {
-        props.history.push('/OrderDetail/:'+ id);
+        props.history.push('/OrderDetail/'+ id);
     }
 
     return <>    

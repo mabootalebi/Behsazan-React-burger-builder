@@ -1,0 +1,19 @@
+.container {
+    padding: 5px 0;    
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+    overflow-y: scroll;
+    resize: vertical;
+    border-radius: 5px;
+    border: solid thin #aaa;
+    outline: none;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: medium;
+}
+
+textarea:focus {
+    outline: solid thin #00af91;
+}
