@@ -1,76 +1,25 @@
-import React, {useReducer} from 'react';
-import axios from '../../Tools/fetch';
+import React from 'react';
+import { useAxios } from '../../Hooks/useAxios';
+import { useReduxDispatch } from '../../Hooks/useReduxDispatch';
 import ServerSidePagingTable from '../../Components/UI/Table/ServerSidePagingTable';
-import Loading from '../../Components/UI/Loading/Loading';
-
-function reducer(currentState, action){
-    switch (action.type){
-        case 'Loading':
-            return {
-                ...currentState,
-                isLoading: true
-            };
-        case 'Init':
-            return{
-                isLoading: false,
-                totalCount: action.payload.totalCount,
-                orders: action.payload.orders
-            };
-        case 'ErrOccurred':
-            return{
-                ...currentState,
-                isLoading:false
-            };
-        default:
-            return currentState;
-    }
-}
+import {useSelector} from 'react-redux';
 
 export default function OrderList(props){
-
-    // const [orders, setOrders] = useState([]);
-    // const [totalCount, setTotalCount] = useState();
-    // const [isLoading, setIsLoading] = useState(false);
-
-    const [state, dispatch] = useReducer(reducer, {
-        orders: [],
-        totalCount:0,
-        isLoading:false
-    });
+    const postAxios = useAxios();
+    const {DisplayOrdersList} = useReduxDispatch();
 
     const fetchData = (data) => {
-        //setIsLoading(true);
-        
-        dispatch({
-            type: 'Loading'
-        });
-
-        axios.post('safeorder/GetAllOrders', {
+        postAxios.post('safeorder/GetAllOrders', {
             sort_field: data.sortField,
 			sort_order: data.sortOrder,
 			page_index: data.pageNumber,
 			page_size: data.pageSize
         })
-        .then(result =>{            
-            // setTotalCount(result.data.total_count);
-            // setOrders(result.data.list);
-            // setIsLoading(false);
-
-            dispatch({
-                type: 'Init',
-                payload: {
-                    totalCount: result.data.total_count,
-                    orders: result.data.list
-                }
-            })
+        .then(result =>{
+            DisplayOrdersList(result.list, result.total_count);
         })
         .catch(err =>{
-            console.log(`Something goes wrong. Error Message: ${err}`);             
-            // setIsLoading(false);
-
-            dispatch({
-                type: 'ErrOccurred'
-            })
+            console.log(`Something goes wrong. Error Message: ${err}`);
         })
     }
 
@@ -87,10 +36,16 @@ export default function OrderList(props){
         props.history.push('/OrderDetail/'+ id);
     }
 
-    return <>    
-     <ServerSidePagingTable keyField="order_number" header={header} body={state.orders} fetchData={fetchData} totalCount={state.totalCount} handleRowClick={handleRowClick}></ServerSidePagingTable>
-     {state.isLoading && <Loading></Loading>}
-     </>
+    const ordersList = useSelector(store => store.ordersList);
+    const ordersTotalCount = useSelector(store => store.ordersTotalCount);
+
+    return <ServerSidePagingTable 
+                keyField="order_number" 
+                header={header} 
+                body={ordersList} 
+                fetchData={fetchData} 
+                totalCount={ordersTotalCount} 
+                handleRowClick={handleRowClick} />
 }
 
 
