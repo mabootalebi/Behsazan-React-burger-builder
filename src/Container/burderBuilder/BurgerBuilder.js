@@ -5,7 +5,6 @@ import Counter from './Counter/Counter';
 import TotalAmount from './TotalAmount/TotalAmount';
 import Button from '../../Components/UI/Button/Button';
 import axios from '../../Tools/fetch';
-import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import { AuthenticationContext } from '../../Context/AuthenticationContext';
 import {connect} from 'react-redux';
 import * as ActionTypes from '../../Store/ActionTypes';
@@ -25,15 +24,9 @@ class BurgerBuilder extends React.Component{
     initialState = {
         meat: this.locationState != null? this.locationState.meat:0,
         cheese:this.locationState != null? this.locationState.cheese:0,
-        lettuce:this.locationState != null? this.locationState.lettuce:0,
-        message: '',
-        messageType: ''
-    }  
+        lettuce:this.locationState != null? this.locationState.lettuce:0,    }  
 
     handleChange = (label,mode) => {
-        // Close Message Box
-        this.displayMessages('','');
-
         this.setState(currentState => {
             return {
                 [label.toLowerCase()]: currentState[label.toLowerCase()] + (mode === 'add'? 1: -1)
@@ -60,21 +53,19 @@ class BurgerBuilder extends React.Component{
         const {meat,cheese,lettuce} = this.state;
 
         if (!this.context.isLogin){
-            this.displayMessages('error', 'You must Login first. Redirecting to Login page...');
+            this.props.DisplayModalMessage('error', 'Not Authorized', 'You must Login first. Redirecting to Login page...');            
             setTimeout(()=> {
                 this.props.history.push('/Login', {meat, cheese, lettuce});
+                this.props.HideModalMessage();
                 return;
             }, 2000)            
         }
 
-        else if (meat + cheese + lettuce === 0){
-            this.setState({
-                message: 'Please Select Detail',
-                messageType: 'warning'
-            });            
+        else if (meat + cheese + lettuce === 0){        
+            this.props.DisplayModalMessage('warning', 'Add Order Failed', 'Please Select Detail');
         }
         else {
-            this.displayMessages('info', 'Sending Request...');
+            this.props.DisplayModalMessage('info', 'Sending', 'Sending Request...');
             this.props.DisplayLoading();
 
             axios.post('safeorder/addorder',{
@@ -87,28 +78,21 @@ class BurgerBuilder extends React.Component{
                     this.setState({
                         ...this.initialState
                     });
-                    this.displayMessages('success', `Your order successfully registered. Order number is: ${result.data.order_number}`);                    
+                    this.props.DisplayModalMessage('success', 'Order successfully registered', `Your order number is: ${result.data.order_number}`);                    
                 }
                 else{
-                    this.displayMessages('error',`Something goes wrong. Error Message: ${result.data.message}`);
+                    this.props.DisplayModalMessage('error','Error',`Something goes wrong. Error Message: ${result.data.message}`);
                 }                
                 this.props.HideLoading();
             }).catch(result =>{
-                this.displayMessages('error',result);
+                this.props.DisplayModalMessage('error','Error',result);
                 this.props.HideLoading();
             })
         }        
     }
 
-    displayMessages = (messageType, messageContent) => {
-        this.setState({
-            messageType: messageType,
-            message: messageContent            
-        })
-    }
-
     render(){
-        const {meat,cheese,lettuce,message,messageType} = this.state;
+        const {meat,cheese,lettuce} = this.state;
 
         return <div className={classes.container}>
             <BurgerView meat={meat} cheese={cheese} lettuce={lettuce}></BurgerView>
@@ -120,14 +104,14 @@ class BurgerBuilder extends React.Component{
                 <Button title="Reset" classnames="rejectButton" onClick={this.resetOrders}></Button>
                 <Button title="Order" classnames="confirmButton" onClick={this.registerOrder}></Button>
             </div>
-            {messageType && <MessageBox messageType={messageType} message={message}></MessageBox>}
         </div>
     }
 }
 
 const mapStateToProps = (state) => {
     return{
-        Loading: state.Loading
+        Loading: state.Loading,
+        massageModal: state.massageModal
     }
 }
 
@@ -139,6 +123,22 @@ const mapDispatchToProps = (dispatch) => {
 
         HideLoading: () => {
             dispatch({type: ActionTypes.UnLoading})
+        },
+
+        DisplayModalMessage: (messageType, messageTitle, messageContext) => {
+            dispatch({
+                type: ActionTypes.DisplayModalMessage,
+                payLoad: {
+                    messageType: messageType,
+                    messageContext: messageContext,
+                    messageTitle: messageTitle
+                }
+            })
+        },    
+        HideModalMessage: () => {
+            dispatch({
+                type: ActionTypes.HideModalMessage
+            })
         }
     }
 }

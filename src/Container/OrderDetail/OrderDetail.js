@@ -1,22 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
 import classes from './OrderDetail.module.css';
 import Button from '../../Components/UI/Button/Button';
-import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import DisplayInfo from '../../Components/UI/DisplayInfo/DisplayInfo';
 import TextArea from '../../Components/UI/TextArea/TextArea';
 import {useAxios} from '../../Hooks/useAxios';
 import {ApplicationContext} from '../../Context/ApplicationContext'
+import { useReduxDispatch } from '../../Hooks/useReduxDispatch';
 
 export default function OrderDetail (props){
 
     const [orderDetail, setOrderDetail] = useState([]);
     const [comment, setComment] = useState('');
-    const [message, setMessage] = useState('');
-    const [messageType, setMessageType] = useState('');
 
     const orderNumber = props.match.params.id;
     const axiosPost = useAxios();
     const appContext = useContext(ApplicationContext);
+    const dispatch = useReduxDispatch();
 
     useEffect(() => {
         axiosPost.post('safeorder/getorder', {order_number: orderNumber})
@@ -45,16 +44,13 @@ export default function OrderDetail (props){
 			comment:comment
         }).then(result => {
             if (result.status){
-                setMessageType('success');
-                setMessage('Your comment successfully saved.');
+                dispatch.DisplayModalMessage('success', 'Success', 'Your comment successfully saved.');
             }
             else {
-                setMessageType('error');
-                setMessage('Something goes wrong. server Message: ' + result.data.message);
+                dispatch.DisplayModalMessage('error', 'Error', 'Something goes wrong. server Message: ' + result.data.message);
             }            
         }).catch(err=> {
-            setMessageType('error');
-            setMessage(err);            
+            dispatch.DisplayModalMessage('error', 'Error', err);
         })
     }
 
@@ -74,9 +70,6 @@ export default function OrderDetail (props){
      <div className={classes.buttonsDiv}>
         <Button title="Back" classnames="rejectButton" onClick={handleBackClick}></Button>
         <Button title="Save Comment" classnames="confirmButton" onClick={handleSaveCommentClick}></Button>
-     </div>
-     
-     <MessageBox message={message} messageType={messageType}></MessageBox>
-     
+     </div>     
     </>
 }

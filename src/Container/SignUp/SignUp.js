@@ -2,7 +2,6 @@ import React from 'react';
 import Input from '../../Components/UI/Input/Input';
 import Button from '../../Components/UI/Button/Button';
 import classes from './SignUp.module.css';
-import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import axios from '../../Tools/fetch';
 import { ApplicationContext } from '../../Context/ApplicationContext';
 import {connect} from 'react-redux';
@@ -29,10 +28,7 @@ class SignUp extends React.Component{
         passwordErrorMessage:'',
         confirmPasswordErrorMessage:'',
         fullNameErrorMessage:'',
-        emailErrorMessage:'',
-
-        message:'',
-        messageType:''
+        emailErrorMessage:''
     };
 
     handleChangeInput = (e) => {
@@ -123,10 +119,7 @@ class SignUp extends React.Component{
         e.preventDefault();
         const canSubmit = this.canSubmit();
         if (!canSubmit){            
-            this.setState({
-                message: 'Cannot Submit form. Resolve all errors.',
-                messageType: 'error'
-            })
+            this.props.DisplayModalMessage('error', 'Submit Failed', 'Cannot Submit form. Resolve all errors.');
         }
         else{
             const {username,password,fullName,email} = this.state;
@@ -137,17 +130,17 @@ class SignUp extends React.Component{
                 fullname:fullName,
                 email:email
             }).then(result => {
-                this.setState({
-                    ...this.initialState,
-                    messageType: result.data.status? 'success': 'error',
-                    message: result.data.message                    
-                });               
+                if (result.data.status){
+                    this.setState({
+                        ...this.initialState
+                    });
+                }
+                this.props.DisplayModalMessage(result.data.status? 'success': 'error', 
+                                               result.data.status?'Successfully Signed Up': 'SignUp Failed', 
+                                               result.data.message);
                 this.props.HideLoading();
             }).catch(err =>{
-                this.setState({
-                    messageType: 'error',
-                    message: err
-                });
+                this.props.DisplayModalMessage('error', 'SignUp Failed', err);
                 this.props.HideLoading();
             })
         }
@@ -156,7 +149,6 @@ class SignUp extends React.Component{
     render(){
         const {username, password, confirmPassword, fullName, email} = this.state;
         const {usernameErrorMessage, passwordErrorMessage, confirmPasswordErrorMessage, fullNameErrorMessage, emailErrorMessage} = this.state;
-        const {message, messageType} = this.state;
 
         return <form onSubmit={this.signUp}>
             <div className={([classes.container,classes[this.context.themeMode]]).join(' ')}>
@@ -171,7 +163,6 @@ class SignUp extends React.Component{
                 <div className={classes.submitButton}>
                     <Button title="Submit" classnames="confirmButton"></Button>
                 </div>
-                {messageType && <MessageBox message={message} messageType={messageType}></MessageBox>}                
             </div>
         </form>
     }
@@ -179,7 +170,8 @@ class SignUp extends React.Component{
 
 const mapStateToProps = (state) => {
     return {
-        Loading: state.Loading
+        Loading: state.Loading,
+        massageModal: state.massageModal
     }
 }
 
@@ -190,6 +182,17 @@ const mapDispatchToProps = (dispatch) => {
         },
         HideLoading: () => {
             dispatch({type: ActionTypes.UnLoading})
+        },
+
+        DisplayModalMessage: (messageType, messageTitle, messageContext) => {
+            dispatch({
+                type: ActionTypes.DisplayModalMessage,
+                payLoad: {
+                    messageType: messageType,
+                    messageContext: messageContext,
+                    messageTitle: messageTitle
+                }
+            })
         }
     }
 }
