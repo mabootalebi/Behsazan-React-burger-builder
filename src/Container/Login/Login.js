@@ -1,23 +1,22 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import classes from './Login.module.css';
 import Input from '../../Components/UI/Input/Input';
 import Button from '../../Components/UI/Button/Button';
-import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import useInput from '../../Hooks/useInput';
 import { AuthenticationContext } from '../../Context/AuthenticationContext';
 import { ApplicationContext } from '../../Context/ApplicationContext';
 import { useAxios } from '../../Hooks/useAxios';
+import { useReduxDispatch } from '../../Hooks/useReduxDispatch';
 
 export default function Login(props){
     const authContext = useContext(AuthenticationContext);
     const appContext = useContext(ApplicationContext);
 
-    const [message,setMessage] = useState('');
-    const [messageType,setMessageType] = useState('');
     const userName = useInput('',true);
     const password = useInput('',true);
     
     const axiosPost = useAxios();
+    const dispatch = useReduxDispatch();
 
     const handleLogin = (e) =>{
         e.preventDefault();
@@ -28,16 +27,14 @@ export default function Login(props){
                 password:password.value
             }).then(result => {
                 if (!result.status){
-                    setMessageType('error');    
-                    setMessage(result.message);                
+                    dispatch.DisplayModalMessage('error', 'Login failed', result.message);         
                 }
                 else{
                     authContext.login(result.message);
                     props.history.push('/BurgerBuilder',props.location.state);
                 }
             }).catch(err =>{
-                setMessageType('error');    
-                setMessage(err);
+                dispatch.DisplayModalMessage('error', 'Login failed', err);
             })
         }
     }
@@ -52,8 +49,6 @@ export default function Login(props){
                 <div className={classes.submitButton}>
                     <Button title="Submit" classnames="confirmButton"></Button>
                 </div>
-
-                {messageType && <MessageBox message={message} messageType={messageType}></MessageBox>}
             </div>
         </form>
 }

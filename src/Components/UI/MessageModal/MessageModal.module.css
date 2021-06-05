@@ -1,0 +1,64 @@
+.container {
+    position: fixed;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: #00000040;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.modalBody {
+    width: 30%;
+    min-height: 110px;
+    background-color: whitesmoke;
+    padding: 5px 20px;
+    box-sizing: border-box;
+    border-radius: 5px 30px;
+    border: solid thin #aaa;
+    position: absolute;
+    top: 20px;
+}
+
+.title{
+    border-bottom: solid 2px #99154e;
+    padding: 10px 0;
+    font-weight: bold;
+}
+
+.success{
+    color: #01aa03;
+    border-bottom-color: #01aa03;
+}
+
+
+.error{
+    color: #cf1b1b;
+    border-bottom-color: #900d0d;
+}
+
+.warning{
+    color: orange;
+    border-bottom-color: yellow;
+}
+
+.info {
+    border-bottom-color: #3282b8;
+    color: #0f4c75;
+}
+
+.context {
+    border-bottom: solid thin #aaa;
+    padding: 15px 0;
+}
+
+.button {
+    text-align: center;
+    padding-top: 5px;
+}

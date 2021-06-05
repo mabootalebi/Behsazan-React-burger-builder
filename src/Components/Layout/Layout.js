@@ -6,12 +6,14 @@ import axios from '../../Tools/fetch'
 import { AuthenticationContext } from '../../Context/AuthenticationContext';
 import {useSelector} from 'react-redux';
 import Loading from '../UI/Loading/Loading';
+import MessageModal from '../UI/MessageModal/MessageModal';
 
 function Layout(props){
     const appContext = useContext(ApplicationContext);
     const authContext = useContext(AuthenticationContext);
 
-    const isLoading = useSelector(loadingStore => loadingStore.loading);
+    const isLoading = useSelector(Store => Store.loading);
+    const messageModal = useSelector(store => store.massageModal);
 
     useEffect(() => {
         const token = window.localStorage.getItem('token');
@@ -34,7 +36,11 @@ function Layout(props){
         <div className={classes.mainBody}>
             {props.children}
         </div>
-        {isLoading && <Loading></Loading>}
+        {isLoading && <Loading />}
+        {messageModal && messageModal.title && <MessageModal 
+                                    Type={messageModal.type} 
+                                    Context={messageModal.context} 
+                                    Title={messageModal.title}/> }
     </div>
 }
 

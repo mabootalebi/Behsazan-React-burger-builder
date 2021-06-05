@@ -16,6 +16,23 @@ export function useReduxDispatch(){
         })
     }
 
+    const DisplayModalMessage = (messageType, messageTitle, messageContext) => {
+        dispatch({
+            type: actionTypes.DisplayModalMessage,
+            payLoad: {
+                messageType: messageType,
+                messageContext: messageContext,
+                messageTitle: messageTitle
+            }
+        })
+    }
+
+    const HideModalMessage = () => {
+        dispatch({
+            type: actionTypes.HideModalMessage
+        })
+    }
+
     const DisplayOrdersList = (ordersList, ordersTotalCount) => {
         dispatch({
             type: actionTypes.DisplayOrdersList,
@@ -29,6 +46,8 @@ export function useReduxDispatch(){
     return {
         DisplayLoading, 
         HideLoading,
+        DisplayModalMessage,
+        HideModalMessage,
         DisplayOrdersList
     };
 }
