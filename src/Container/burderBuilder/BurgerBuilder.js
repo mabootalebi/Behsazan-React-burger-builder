@@ -8,7 +8,7 @@ import axios from '../../Tools/fetch';
 import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import { AuthenticationContext } from '../../Context/AuthenticationContext';
 import {connect} from 'react-redux';
-import * as loadingActionTypes from '../../Store/loading/loadingActionTypes';
+import * as ActionTypes from '../../Store/ActionTypes';
 
 class BurgerBuilder extends React.Component{
 
@@ -134,11 +134,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         DisplayLoading: () => {
-            dispatch({type: loadingActionTypes.Loading})
+            dispatch({type: ActionTypes.Loading})
         },
 
         HideLoading: () => {
-            dispatch({type: loadingActionTypes.UnLoading})
+            dispatch({type: ActionTypes.UnLoading})
         }
     }
 }

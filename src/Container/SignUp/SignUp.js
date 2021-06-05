@@ -6,7 +6,7 @@ import MessageBox from '../../Components/UI/MessageBox/MessageBox';
 import axios from '../../Tools/fetch';
 import { ApplicationContext } from '../../Context/ApplicationContext';
 import {connect} from 'react-redux';
-import * as loadingActionTypes from '../../Store/loading/loadingActionTypes';
+import * as ActionTypes from '../../Store/ActionTypes';
 
 class SignUp extends React.Component{
 
@@ -186,10 +186,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         DisplayLoading: () => {
-            dispatch({type: loadingActionTypes.Loading})
+            dispatch({type: ActionTypes.Loading})
         },
         HideLoading: () => {
-            dispatch({type: loadingActionTypes.UnLoading})
+            dispatch({type: ActionTypes.UnLoading})
         }
     }
 }

@@ -9,10 +9,10 @@ import { ApplicationProvider } from './Context/ApplicationContext';
 import OrderDetail from './Container/OrderDetail/OrderDetail';
 import AccessDenied from './Container/CustomErrorPages/AccessDenied/AccessDenied';
 import {createStore} from 'redux';
-import { loadingReducer } from './Store/loading/loadingReducer';
+import { Reducer } from './Store/Reducer';
 import {Provider} from 'react-redux';
 
-const loadingStore = createStore(loadingReducer);
+const loadingStore = createStore(Reducer);
 
 function App() {
   return (

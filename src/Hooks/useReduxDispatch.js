@@ -1,4 +1,4 @@
-import * as loadingActionTypes from '../Store/loading/loadingActionTypes';
+import * as actionTypes from '../Store/ActionTypes';
 import {useDispatch} from 'react-redux';
 
 export function useReduxDispatch(){
@@ -6,18 +6,29 @@ export function useReduxDispatch(){
 
     const DisplayLoading = () => {
         dispatch({
-            type: loadingActionTypes.Loading
+            type: actionTypes.Loading
         })
     }
 
     const HideLoading = () => {
         dispatch({
-            type: loadingActionTypes.UnLoading
+            type: actionTypes.UnLoading
+        })
+    }
+
+    const DisplayOrdersList = (ordersList, ordersTotalCount) => {
+        dispatch({
+            type: actionTypes.DisplayOrdersList,
+            payLoad: {
+                ordersList: ordersList,
+                ordersTotalCount: ordersTotalCount
+            }
         })
     }
 
     return {
         DisplayLoading, 
-        HideLoading
+        HideLoading,
+        DisplayOrdersList
     };
 }
