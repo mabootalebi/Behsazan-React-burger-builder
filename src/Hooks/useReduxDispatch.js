@@ -43,11 +43,29 @@ export function useReduxDispatch(){
         })
     }
 
+    const ChangeOrderDetail = (title,mode) => {
+        dispatch({
+            type: actionTypes.ChangeOrder,
+            payLoad: {
+                title,
+                mode
+            }
+        })
+    }
+
+    const ResetOrder = () => {
+        dispatch({
+            type: actionTypes.ResetOrder
+        })
+    }
+
     return {
         DisplayLoading, 
         HideLoading,
         DisplayModalMessage,
         HideModalMessage,
-        DisplayOrdersList
+        DisplayOrdersList,
+        ChangeOrderDetail,
+        ResetOrder
     };
 }

@@ -9,37 +9,20 @@ import { AuthenticationContext } from '../../Context/AuthenticationContext';
 import {connect} from 'react-redux';
 import * as ActionTypes from '../../Store/ActionTypes';
 
-class BurgerBuilder extends React.Component{
+class BurgerBuilder extends React.PureComponent{
 
     static contextType = AuthenticationContext;
 
     constructor(props){
         super(props);
-        
-        this.state= this.initialState;
-    }
-
-    locationState = this.props.location.state;
-
-    initialState = {
-        meat: this.locationState != null? this.locationState.meat:0,
-        cheese:this.locationState != null? this.locationState.cheese:0,
-        lettuce:this.locationState != null? this.locationState.lettuce:0,    }  
-
-    handleChange = (label,mode) => {
-        this.setState(currentState => {
-            return {
-                [label.toLowerCase()]: currentState[label.toLowerCase()] + (mode === 'add'? 1: -1)
-            }
-        })
     }
 
     resetOrders = () =>{
-        this.setState(()=>this.initialState)
+        this.props.ResetOrder();
     }
 
     calculateTotalAmount = () => {
-        const {meat,cheese,lettuce} = this.state;
+        const {meat,cheese,lettuce} = this.props.burgerBuilder;
 
         const meatPrice = meat * 5000;
         const cheesePrice = cheese * 4000;
@@ -50,7 +33,7 @@ class BurgerBuilder extends React.Component{
     }
 
     registerOrder = () => {        
-        const {meat,cheese,lettuce} = this.state;
+        const {meat,cheese,lettuce} = this.props.burgerBuilder;
 
         if (!this.context.isLogin){
             this.props.DisplayModalMessage('error', 'Not Authorized', 'You must Login first. Redirecting to Login page...');            
@@ -75,10 +58,8 @@ class BurgerBuilder extends React.Component{
                 total_price:this.calculateTotalAmount()
         }).then(result => {
                 if(result.data.status){
-                    this.setState({
-                        ...this.initialState
-                    });
-                    this.props.DisplayModalMessage('success', 'Order successfully registered', `Your order number is: ${result.data.order_number}`);                    
+                    this.props.DisplayModalMessage('success', 'Order successfully registered', `Your order number is: ${result.data.order_number}`);
+                    this.resetOrders();
                 }
                 else{
                     this.props.DisplayModalMessage('error','Error',`Something goes wrong. Error Message: ${result.data.message}`);
@@ -92,13 +73,11 @@ class BurgerBuilder extends React.Component{
     }
 
     render(){
-        const {meat,cheese,lettuce} = this.state;
-
         return <div className={classes.container}>
-            <BurgerView meat={meat} cheese={cheese} lettuce={lettuce}></BurgerView>
-            <Counter label="Cheese" count={cheese} onChange={this.handleChange}></Counter>
-            <Counter label="Meat" count={meat} onChange={this.handleChange}></Counter>
-            <Counter label="Lettuce" count={lettuce} onChange={this.handleChange}></Counter>
+            <BurgerView/>
+            <Counter label="Cheese"></Counter>
+            <Counter label="Meat"></Counter>
+            <Counter label="Lettuce"></Counter>
             <TotalAmount totalAmount={this.calculateTotalAmount()}></TotalAmount>
             <div>
                 <Button title="Reset" classnames="rejectButton" onClick={this.resetOrders}></Button>
@@ -111,7 +90,8 @@ class BurgerBuilder extends React.Component{
 const mapStateToProps = (state) => {
     return{
         Loading: state.Loading,
-        massageModal: state.massageModal
+        massageModal: state.massageModal,
+        burgerBuilder: state.burgerBuilder
     }
 }
 
@@ -138,6 +118,11 @@ const mapDispatchToProps = (dispatch) => {
         HideModalMessage: () => {
             dispatch({
                 type: ActionTypes.HideModalMessage
+            })
+        },    
+        ResetOrder: () => {
+            dispatch({
+                type: ActionTypes.ResetOrder
             })
         }
     }

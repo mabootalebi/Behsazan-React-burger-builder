@@ -6,6 +6,12 @@ const initMessageModal = {
     type: ''
 }
 
+const initBurgerBuilder = {
+    meat: 0,
+    cheese: 0,
+    lettuce: 0
+}
+
 const initialStore = {
     // Loading
     loading: false,
@@ -17,7 +23,8 @@ const initialStore = {
     ordersList: [],
     ordersTotalCount:0,
 
-    
+    // burger builder
+    burgerBuilder: initBurgerBuilder
 };
 
 
@@ -55,6 +62,21 @@ export function Reducer(store = initialStore, action){
                 ...store,
                 ordersList: action.payLoad.ordersList,
                 ordersTotalCount: action.payLoad.ordersTotalCount
+            }
+
+        case actionTypes.ChangeOrder:
+            return{
+                ...store,
+                burgerBuilder:{
+                    ...store.burgerBuilder,
+                    [action.payLoad.title]: store.burgerBuilder[action.payLoad.title] + (action.payLoad.mode === 'add'? 1: -1)                    
+                }
+            }
+        
+        case actionTypes.ResetOrder:
+            return{
+                ...store,
+                burgerBuilder: initBurgerBuilder
             }
 
         default: return store;
