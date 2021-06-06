@@ -1,16 +1,13 @@
 import Layout from './Components/Layout/Layout'
-import BurgerBuilder from './Container/burderBuilder/BurgerBuilder'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
-import OrderList from './Container/OrderList/OrderList';
-import SignUp from './Container/SignUp/SignUp';
-import Login from './Container/Login/Login';
 import { AuthenticationProvider } from './Context/AuthenticationContext';
 import { ApplicationProvider } from './Context/ApplicationContext';
-import OrderDetail from './Container/OrderDetail/OrderDetail';
-import AccessDenied from './Container/CustomErrorPages/AccessDenied/AccessDenied';
 import {createStore} from 'redux';
 import { Reducer } from './Store/Reducer';
 import {Provider} from 'react-redux';
+import { Suspense } from 'react';
+import Loading from './Components/UI/Loading/Loading';
+import routes from '../src/Tools/routes';
 
 const loadingStore = createStore(Reducer);
 
@@ -22,13 +19,10 @@ function App() {
           <Provider store={loadingStore}>
             <Layout>
               <Switch>
-                <Route path="/OrderList" component={OrderList}></Route>
-                <Route path="/SignUp" component={SignUp}></Route>
-                <Route path="/BurgerBuilder" component={BurgerBuilder}></Route>
-                <Route path="/Login" component={Login}></Route>
-                <Redirect exact from="/" to="/Login" />
-                <Route path="/OrderDetail/:id" component={OrderDetail}></Route>
-                <Route path="/AccessDenied" component={AccessDenied}></Route>
+                <Suspense fallback={<Loading/>}>
+                  {routes.map(t=> <Route key={t.path} path={t.path} component={t.component}/>)}
+                  <Redirect exact from="/" to="/Login" />
+                </Suspense>
               </Switch>
             </Layout>
           </Provider>
