@@ -5,7 +5,7 @@ import { ApplicationProvider } from './Context/ApplicationContext';
 import {createStore} from 'redux';
 import { Reducer } from './Store/Reducer';
 import {Provider} from 'react-redux';
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import Loading from './Components/UI/Loading/Loading';
 import routes from '../src/Tools/routes';
 
@@ -21,7 +21,7 @@ function App() {
               <Switch>
                 <Suspense fallback={<Loading/>}>
                   {routes.map(t=> <Route key={t.path} path={t.path} component={t.component}/>)}
-                  <Redirect exact from="/" to="/Login" />
+                  <Route exact path="/" component={lazy(() => import('./Container/Login/Login'))}/>
                 </Suspense>
               </Switch>
             </Layout>
